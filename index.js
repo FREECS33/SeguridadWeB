@@ -1,49 +1,61 @@
-let y = document.getElementById("y");
-let x = document.getElementById("x");
-let tiempo = document.getElementById("tiempo")
-let cantidad = document.getElementById("cantidad")
+let matriz = [];
+let intervalo;
 
-function startPainting() {
+function generarMatriz() {
+  const coordenadaX = document.getElementById("coordenadaX").value;
+  const coordenadaY = document.getElementById("coordenadaY").value;
 
-    let array = [x][y]
-
-    var randomX = (Math.random() * x) + 1
-    var randomY = (Math.random() * y) + 1
-
-    if (array[x] == "X") {
-        pintar()
+  for (let i = 0; i < coordenadaX; i++) {
+    matriz[i] = [];
+    for (let j = 0; j < coordenadaY; j++) {
+      matriz[i][j] = "";
     }
+  }
 
-    // var body = document.getElementById("matriz"[0])
-
-    // var matriz = document.createElement("table");
-    // var matrizBody = document.createElement("tbody")
-
-
-    // for (var i = 0; i < y; i++) {
-    //     var columna = document.createElement("tr")
-
-    //     for (var j = 0; j < x; j++) {
-    //         var celda = createElement("td")
-    //         columna.appendChild(celda)
-    //     }
-
-    //     matrizBody.appendChild(columna)
-    // }
-
-    // console.log(matrizBody)
-
-    // matriz.appendChild(matrizBody)
-
-    // body.appendChild(matriz)
-
-    // matriz.setAttribute("border", 2)
-
-    // var intervalo = tiempo * 1000;
-
-    // setInterval(pintar(cantidad), intervalo)
+  mostrarMatriz();
 }
 
-function pintar(cantidad) {
+function mostrarMatriz() {
+  const matrizHtml = document.getElementById("matriz");
+  matrizHtml.innerHTML = "";
 
+  const tabla = document.createElement("table");
+  tabla.classList.add("border");
+
+  for (let i = 0; i < matriz.length; i++) {
+    const fila = document.createElement("tr");
+    for (let j = 0; j < matriz[i].length; j++) {
+      const columna = document.createElement("td");
+      columna.innerHTML = matriz[i][j];
+      fila.appendChild(columna);
+    }
+    tabla.appendChild(fila);
+  }
+
+  const coordenadas = obtenerCoordenadas();
+
+  for (let i = 0; i < coordenadas.length; i++) {
+    if (matriz[coordenadas[i].x][coordenadas[i].y] !== "X") {
+      matriz[coordenadas[i].x][coordenadas[i].y] = "X";
+    } else {
+      break;
+    }
+  }
+
+  matrizHtml.appendChild(tabla);
+}
+
+function obtenerCoordenadas() {
+  const cantidad = parseInt(document.getElementById("cantidad").value);
+  let coords = [];
+  for (let i = 0; i < cantidad; i++) {
+    let x = Math.floor(Math.random() * matriz.length);
+    let y = Math.floor(Math.random() * matriz[0].length);
+    coords.push({ x, y });
+  }
+  return coords;
+}
+
+function detener() {
+  clearInterval(intervalo);
 }
